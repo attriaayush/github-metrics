@@ -43,7 +43,7 @@ Example Response:
 1. Provide options to generate distributions and output csv.
 
 ```bash
-GITHUB_TOKEN=<token> GITHUB_OWNER=<owner> REPO_NAME=<repo> npm run start -- --distributions="monthly" --csv
+GITHUB_TOKEN=<token> GITHUB_OWNER=<owner> REPO_NAME=<repo> npm run start -- --distribution="monthly" --csv
 
 Example Response:
 During,Average Number of Comments,Average File Changes,Average Deletions,Average Additions,Mean Time For Review (hours),Mean Merge Time (hours),Total,Without Comments
