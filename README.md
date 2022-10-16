@@ -1,4 +1,4 @@
-# github-metrics
+# Github Metrics
 
 Generates only basic pull request metrics (so far). Provides
 ability to generate weekly, monthly or yearly distributions for your repository.
