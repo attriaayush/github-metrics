@@ -11,6 +11,10 @@ const asHours = (seconds: number) => {
   return dayjs.duration(seconds, "seconds").asHours();
 };
 
+const asMinutes = (seconds: number) => {
+  return dayjs.duration(seconds, "seconds").asMinutes();
+};
+
 const humanizedKeys = {
   meanMergeTime: "Mean Merge Time (hours)",
   meanTimeToReview: "Mean Time For Review (hours)",
@@ -38,6 +42,22 @@ export const measure = (pullRequests: PullRequest[]) => {
       [humanizedKeys.missedFlow]: 0,
     },
   };
+
+  const timeToReviewMinutes = pullRequests.map((pullRequest) => {
+    return asMinutes(
+      (new Date(pullRequest.reviewedAt).getTime() -
+        new Date(pullRequest.createdAt).getTime()) /
+        1000
+    );
+  });
+
+  const timeToMergeMinutes = pullRequests.map((pullRequest) => {
+    return asMinutes(
+      (new Date(pullRequest.mergedAt).getTime() -
+        new Date(pullRequest.createdAt).getTime()) /
+        1000
+    );
+  });
 
   const { meanBucket, countBucket } = pullRequests.reduce(
     (metrics, pullRequest) => ({
@@ -110,6 +130,14 @@ export const measure = (pullRequests: PullRequest[]) => {
   return {
     ...mean,
     Total: pullRequests.length,
+    "Median Time To Review": median(timeToReviewMinutes),
+    "Median Time To Merge": median(timeToMergeMinutes),
     [humanizedKeys.withoutComments]: withoutComments,
   };
+};
+
+const median = (numbers: number[]) => {
+  const mid = Math.floor(numbers.length / 2),
+    nums = [...numbers].sort((a, b) => a - b);
+  return numbers.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2;
 };
